@@ -3,7 +3,7 @@ const app = express();
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require('dotenv').config()
+require("dotenv").config();
 
 const {
   validateData,
@@ -31,6 +31,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/blogs", (req, res) => {
   const sqlSelect = "SELECT * FROM blog_table;";
   db.query(sqlSelect, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+      return;
+    }
     res.send(result);
   });
 });
@@ -39,6 +43,10 @@ app.get("/blog/view/:id", (req, res) => {
   const id = req.params.id;
   const sqlSelect = "SELECT * FROM blog_table WHERE id=(?);";
   db.query(sqlSelect, id, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+      return;
+    }
     res.send(result);
   });
 });
@@ -47,6 +55,10 @@ app.get("/user/:username", (req, res) => {
   const username = req.params.username;
   const sqlSearch = "SELECT * FROM blog_table WHERE username=(?);";
   db.query(sqlSearch, username, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+      return;
+    }
     res.send(result);
   });
 });
@@ -55,6 +67,10 @@ app.delete("/blog/delete/:id", (req, res) => {
   const id = req.params.id;
   const sqlDelete = "DELETE FROM blog_table WHERE id = (?);";
   db.query(sqlDelete, id, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+      return;
+    }
     res.send(result);
   });
 });
@@ -69,7 +85,10 @@ app.put("/blog/update", (req, res) => {
   }
   const sqlUpdate = "UPDATE blog_table SET content = ? WHERE id = ?;";
   db.query(sqlUpdate, [content, id], (err, result) => {
-    if (err) console.log(err);
+    if (err) {
+      res.status(400).send(err);
+      return;
+    }
     res.send(result);
   });
 });
@@ -86,7 +105,10 @@ app.post("/insert_blog", (req, res) => {
   const sqlInsert =
     "INSERT INTO blog_table (title, username, content) VALUES (?,?,?);";
   db.query(sqlInsert, [title, username, content], (err, result) => {
-    if (err) console.log(err);
+    if (err) {
+      res.status(400).send(err);
+      return;
+    }
     res.send(result);
   });
   return;

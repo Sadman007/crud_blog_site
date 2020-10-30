@@ -12,7 +12,7 @@ class Blog extends Component {
     this.state = {
       value: "",
       id: props.match.params.id,
-      blog: [],
+      blog: "",
     };
   }
 

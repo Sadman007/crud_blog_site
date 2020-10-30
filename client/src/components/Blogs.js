@@ -41,7 +41,7 @@ class Blogs extends Component {
         ? -1
         : 1
     );
-    this.setState({blogs: obj});
+    this.setState({ blogs: obj });
   };
 
   handleSortDsc = () => {
@@ -55,7 +55,7 @@ class Blogs extends Component {
         ? 1
         : -1
     );
-    this.setState({blogs: obj});
+    this.setState({ blogs: obj });
   };
 
   render() {

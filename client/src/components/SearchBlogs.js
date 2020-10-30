@@ -18,26 +18,18 @@ class SearchBlogs extends Component {
     this.setState({ username: e.target.value, searchResultMessage: "" });
   };
 
-  handleSearchResult = () => {
-    axios
-      .get(`http://localhost:3001/user/${this.state.username}`)
-      .then((response) => {
-        this.setState(
-          {
-            blogs: response.data,
-          },
-          () => {
-            console.log(response.data);
-            if (this.state.blogs.length === 0) {
-              this.setState({ searchResultMessage: "No result!" });
-            } else {
-              this.setState({
-                searchResultMessage: `Blog Count: ${this.state.blogs.length}`,
-              });
-            }
-          }
-        );
-      });
+  handleSearchResult = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3001/user/${this.state.username}`
+      );
+      this.setState({ blogs: data });
+      const length = this.state.blogs.length;
+      if (length === 0) this.setState({ searchResultMessage: "No result!" });
+      else this.setState({ searchResultMessage: `Blog Count: ${length}` });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {
@@ -63,8 +55,11 @@ class SearchBlogs extends Component {
               >
                 Search
               </button>
-              <br></br><br></br>
-               <p className="text-muted float-left">{this.state.searchResultMessage}</p>
+              <br></br>
+              <br></br>
+              <p className="text-muted float-left">
+                {this.state.searchResultMessage}
+              </p>
             </div>
           </div>
         </form>
@@ -73,7 +68,6 @@ class SearchBlogs extends Component {
           <table className="center table table-bordered">
             <thead>
               <tr>
-
                 <th scope="col">Title</th>
               </tr>
             </thead>

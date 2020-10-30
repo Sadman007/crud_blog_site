@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -28,7 +28,7 @@ class Create_Blog extends Component {
       title: event.target.value,
       usernameError: "",
       titleError: "",
-      contentError: ""
+      contentError: "",
     });
   };
 
@@ -70,12 +70,21 @@ class Create_Blog extends Component {
     return true;
   };
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const isValid = this.validate();
-    if (isValid) {
-      axios.post("http://localhost:3001/insert_blog", {title: this.state.title, username: this.state.username, content: this.state.content});
-      this.setState(initialState);
-      toast.success("New blog has been created!", {autoClose: 1200});
+    try {
+      if (isValid) {
+        await axios.post("http://localhost:3001/insert_blog", {
+          title: this.state.title,
+          username: this.state.username,
+          content: this.state.content,
+        });
+        this.setState(initialState);
+        toast.success("New blog has been created!", { autoClose: 1200 });
+      }
+    } catch (err) {
+      console.log(err);
+      toast.warn("Something went wrong", { autoClose: 1200 });
     }
   };
 

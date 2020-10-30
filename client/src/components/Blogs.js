@@ -11,30 +11,28 @@ class Blogs extends Component {
     };
   }
 
-  componentDidMount() {
-    axios.get("http://localhost:3001/blogs").then((response) => {
-      this.setState(
-        {
-          blogs: response.data,
-        },
-        () => {
-          console.log(response.data);
-        }
-      );
-    });
+  async componentDidMount() {
+    try {
+      const { data } = await axios.get("http://localhost:3001/blogs");
+      this.setState({ blogs: data });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  handleDelete = (id) => {
-    axios.delete(`http://localhost:3001/blog/delete/${id}`);
-    const newBloglist = this.state.blogs.filter((m) => id !== m.id);
-    this.setState({
-      blogs: newBloglist,
-    });
+  handleDelete = async (id) => {
+    try {
+      const response = axios.delete(`http://localhost:3001/blog/delete/${id}`);
+      const newBloglist = this.state.blogs.filter((m) => id !== m.id);
+      this.setState({ blogs: newBloglist });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   handleSortAsc = () => {
-    var obj = [...this.state.blogs];
-    obj.sort((a, b) =>
+    var obj = this.state.blogs;
+    this.state.blogs.sort((a, b) =>
       a.username == b.username
         ? a.title < b.title
           ? -1
@@ -43,18 +41,11 @@ class Blogs extends Component {
         ? -1
         : 1
     );
-    this.setState(
-      {
-        blogs: obj,
-      },
-      () => {
-        console.log(obj);
-      }
-    );
+    this.setState({blogs: obj});
   };
 
   handleSortDsc = () => {
-    var obj = [...this.state.blogs];
+    var obj = this.state.blogs;
     obj.sort((a, b) =>
       a.username == b.username
         ? a.title < b.title
@@ -64,14 +55,7 @@ class Blogs extends Component {
         ? 1
         : -1
     );
-    this.setState(
-      {
-        blogs: obj,
-      },
-      () => {
-        console.log(obj);
-      }
-    );
+    this.setState({blogs: obj});
   };
 
   render() {

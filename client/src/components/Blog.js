@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 toast.configure();
 
@@ -12,15 +12,19 @@ class Blog extends Component {
     this.state = {
       value: "",
       id: props.match.params.id,
-      blog: []
+      blog: [],
     };
-    
   }
 
-  componentDidMount() {
-    axios.get(`http://localhost:3001/blog/view/${this.state.id}`).then((response)=>{
-      this.setBlog(response.data);
-    })
+  async componentDidMount() {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3001/blog/view/${this.state.id}`
+      );
+      this.setState({ blog: data[0] });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   handleTextBoxChange = (event) => {
@@ -29,31 +33,32 @@ class Blog extends Component {
     });
   };
 
-  handleUpdateblog = () => {
-    axios.put("http://localhost:3001/blog/update", {id: this.state.id, content: this.state.value});
-    toast.success("Update done!", {autoClose: 1000});
+  handleUpdateblog = async () => {
+    try {
+      const { data } = await axios.put("http://localhost:3001/blog/update", {
+        id: this.state.id,
+        content: this.state.value,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    toast.success("Update done!", { autoClose: 1000 });
   };
 
-  setBlog(data) {
-    this.setState({
-      blog: data[0]
-    })
-  }
-
   render() {
-    const blog_item = this.state.blog;
+    const { title, username, content, value } = this.state.blog;
     return (
       <div>
-        <h1>{blog_item.title}</h1>
-        <h3>Writer: {blog_item.username}</h3>
-        <p>{blog_item.content}</p>
+        <h1>{title}</h1>
+        <h3>Writer: {username}</h3>
+        <p>{content}</p>
         <div class="form-group">
           <label for="exampleFormControlTextarea1" />
           <textarea
             class="form-control"
             id="updatedBlog"
             rows="6"
-            value={this.state.value}
+            value={value}
             onChange={this.handleTextBoxChange}
           ></textarea>
         </div>

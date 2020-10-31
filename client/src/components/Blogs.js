@@ -13,7 +13,7 @@ class Blogs extends Component {
 
   async componentDidMount() {
     try {
-      const { data } = await axios.get("http://localhost:3001/blogs");
+      const { data } = await axios.get("http://localhost:3001/api/blog/all");
       this.setState({ blogs: data });
     } catch (err) {
       console.log(err);
@@ -22,7 +22,7 @@ class Blogs extends Component {
 
   handleDelete = async (id) => {
     try {
-      const response = axios.delete(`http://localhost:3001/blog/delete/${id}`);
+      const response = axios.delete(`http://localhost:3001/api/blog/delete/${id}`);
       const newBloglist = this.state.blogs.filter((m) => id !== m.id);
       this.setState({ blogs: newBloglist });
     } catch (err) {

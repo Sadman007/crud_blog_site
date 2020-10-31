@@ -74,7 +74,7 @@ class Create_Blog extends Component {
     const isValid = this.validate();
     try {
       if (isValid) {
-        await axios.post("http://localhost:3001/insert_blog", {
+        await axios.post("http://localhost:3001/api/blog/insert", {
           title: this.state.title,
           username: this.state.username,
           content: this.state.content,

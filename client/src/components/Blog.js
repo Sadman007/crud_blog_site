@@ -19,7 +19,7 @@ class Blog extends Component {
   async componentDidMount() {
     try {
       const { data } = await axios.get(
-        `http://localhost:3001/blog/view/${this.state.id}`
+        `http://localhost:3001/api/blog/view/${this.state.id}`
       );
       this.setState({ blog: data[0] });
     } catch (err) {
@@ -35,7 +35,7 @@ class Blog extends Component {
 
   handleUpdateblog = async () => {
     try {
-      const { data } = await axios.put("http://localhost:3001/blog/update", {
+      const { data } = await axios.put("http://localhost:3001/api/blog/update", {
         id: this.state.id,
         content: this.state.value,
       });

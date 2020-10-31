@@ -21,7 +21,7 @@ class SearchBlogs extends Component {
   handleSearchResult = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3001/user/${this.state.username}`
+        `http://localhost:3001/api/user/${this.state.username}`
       );
       this.setState({ blogs: data });
       const length = this.state.blogs.length;
